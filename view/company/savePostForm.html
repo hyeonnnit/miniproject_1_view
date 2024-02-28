@@ -12,6 +12,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- 폰트어썸 cdn-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        li {
+            list-style: none;
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,6 +59,60 @@
             <div class="border border-tertiary p-5 rounded shadow">
                 <h1 class="d-inline-flex">공고 등록하기</h1>
                 <hr>
+
+
+                <div class="upload"><img src="/images/naver.png" id="companyLogo" s
+                        class="rounded mx-auto d-block rounded-4 mt-5 my-3 w-25"></div>
+                <ul class="image-preview rounded mx-auto d-block rounded-4 mt-5 my-3 w-25"></ul>
+                <input type="file" class="real-upload mx-auto d-block mt-5 my-3 w-25" accept="image/*" required
+                    multiple>
+                <script>
+                    function getImageFiles(e) {
+                        const files = e.currentTarget.files;
+                        const imagePreview = document.querySelector('.image-preview');
+                        imagePreview.innerHTML = '';
+                        if (files.length >= 2) {
+                            alert('이미지는 1개만 업로드 가능합니다.');
+                            return;
+                        }
+
+                        const file = files[0];
+
+                        if (!file) {
+                            return;
+                        }
+
+                        if (!file.type.match("image/.*")) {
+                            alert('이미지 파일만 업로드 가능합니다.');
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const preview = createElement(e, file);
+                            imagePreview.appendChild(preview);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+
+                    function createElement(e, file) {
+                        const li = document.createElement('li');
+                        const img = document.createElement('img');
+                        img.setAttribute('src', e.target.result);
+                        img.setAttribute('data-file', file.name);
+                        li.appendChild(img);
+
+                        return li;
+                    }
+
+                    const realUpload = document.querySelector('.real-upload');
+                    const upload = document.querySelector('.upload');
+
+                    upload.addEventListener('click', () => realUpload.click());
+
+                    realUpload.addEventListener('change', getImageFiles);
+                </script>
+
                 <form action="#" method="post">
                     <div class="px-5 mt-5">
                         <h5><b>공고명</b></h5>
@@ -165,7 +229,7 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a href="#" class="btn btn-outline-danger mb-3" style="width: 100%">등록하기</a>
-                              </div>
+                            </div>
                         </div>
                     </div>
                 </form>
